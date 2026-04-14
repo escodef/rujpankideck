@@ -9,17 +9,17 @@ dependencies = [
     "beautifulsoup4>=4.14.3",
     "html2text>=2025.4.15",
     "jaconv>=0.4.1",
-    "pydantic>=2.12.5",
-    "pytest>=9.0.2",
+    "pydantic>=2.13.0",
+    "pytest>=9.0.3",
     "python-dotenv>=1.2.1",
     "pywinauto>=0.6.9",
-    "requests>=2.32.5",
-    "sqlalchemy>=2.0.45",
+    "requests>=2.33.1",
+    "sqlalchemy>=2.0.49",
 ]
 
 [dependency-groups]
 dev = [
-    "ruff>=0.15.6",
+    "ruff>=0.15.10",
 ]
 
 [tool.uv.workspace]
