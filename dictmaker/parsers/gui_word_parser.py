@@ -24,7 +24,7 @@ class WordParserGUI:
             self.app = Application(backend="uia").connect(
                 title_re=".*Jardic Pro.*", timeout=2
             )
-        except (ElementNotFoundError, Exception):
+        except ElementNotFoundError, Exception:
             self.logger.debug("App not found. Starting up...")
             Application(backend="uia").start(jardic_path)
             self.app = Application(backend="uia").connect(
@@ -107,7 +107,7 @@ class WordParserGUI:
 
             yarxi_reading = self.YARXI_RE.findall(sents[1])
 
-            print(yarxi_reading)
+            self.logger.debug(yarxi_reading)
 
             if yarxi_reading:
                 word = sents[0]

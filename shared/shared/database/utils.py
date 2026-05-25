@@ -1,11 +1,10 @@
 from .models import TranslationTable, ExampleTable, NotFoundTable
-from .db_session import SessionLocal
+from .db_session import get_session
 from sqlalchemy import or_
 
 
 def save_to_sqlite(dictionary):
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         for item in dictionary:
             db_translation = TranslationTable(
                 word=item.word,
@@ -19,33 +18,19 @@ def save_to_sqlite(dictionary):
                     ExampleTable(ja=ex.ja, re=ex.re, tr=ex.tr)
                 )
             session.add(db_translation)
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        raise e
-    finally:
-        session.close()
 
 
 def add_not_found(word, reading):
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         db_translation = NotFoundTable(
             word=word,
             reading=reading,
         )
         session.add(db_translation)
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        raise e
-    finally:
-        session.close()
 
 
 def get_not_found(word, reading):
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         result = (
             session.query(NotFoundTable)
             .filter(NotFoundTable.word == word, NotFoundTable.reading == reading)
@@ -53,13 +38,10 @@ def get_not_found(word, reading):
         )
 
         return result
-    finally:
-        session.close()
 
 
 def get_by_word_or_reading(word: str, reading: str, limit=3) -> list[TranslationTable]:
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         result = (
             session.query(TranslationTable)
             .filter(
@@ -80,13 +62,10 @@ def get_by_word_or_reading(word: str, reading: str, limit=3) -> list[Translation
         )
 
         return results
-    finally:
-        session.close()
 
 
 def get_by_word_and_reading(word: str, reading: str) -> TranslationTable | None:
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         results = (
             session.query(TranslationTable)
             .filter(
@@ -96,13 +75,10 @@ def get_by_word_and_reading(word: str, reading: str) -> TranslationTable | None:
             .first()
         )
         return results
-    finally:
-        session.close()
 
 
 def get_by_word(word: str) -> TranslationTable | None:
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         results = (
             session.query(TranslationTable)
             .filter(
@@ -111,13 +87,10 @@ def get_by_word(word: str) -> TranslationTable | None:
             .first()
         )
         return results
-    finally:
-        session.close()
 
 
 def get_by_reading(reading: str, limit=3) -> list[TranslationTable]:
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         pattern_middle = f"%・{reading}・%"
         pattern_middle_spaced = f"%・ {reading} ・%"
         pattern_end = f"%・{reading}"
@@ -142,26 +115,19 @@ def get_by_reading(reading: str, limit=3) -> list[TranslationTable]:
             .all()
         )
         return results
-    finally:
-        session.close()
 
 
 def get_by_index(query: int) -> list[TranslationTable]:
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         results = (
             session.query(TranslationTable)
             .filter(TranslationTable.index_csv == query)
             .all()
         )
         return results
-    finally:
-        session.close()
+
 
 def get_all_parsed_indexes() -> set[int]:
-    session = SessionLocal()
-    try:
+    with get_session() as session:
         results = session.query(TranslationTable.index_csv).distinct().all()
         return {r[0] for r in results if r[0] is not None}
-    finally:
-        session.close()

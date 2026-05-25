@@ -311,7 +311,7 @@ def test_go(processor):
         if not processor.is_duplicate_translation(translation, seen_in_batch):
             dictionary.append(translation)
             processor._add_to_seen(translation, seen_in_batch)
-    
+
     print(seen_in_batch)
 
     assert len(dictionary) == 10

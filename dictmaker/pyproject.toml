@@ -3,10 +3,8 @@ name = "dictmaker"
 version = "2026.1.7"
 description = "Dictionary generator for anki cards"
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "shared",
-]
+requires-python = ">=3.14"
+dependencies = ["shared"]
 
 [tool.uv.sources]
 shared = { workspace = true }
