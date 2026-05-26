@@ -1,4 +1,5 @@
 import pytest
+import logging
 
 from parsers.gui_word_parser import WordParserGUI
 from models.models import Translation
@@ -7,6 +8,8 @@ from models.models import Translation
 @pytest.fixture
 def parser():
     obj = WordParserGUI.__new__(WordParserGUI)
+
+    obj.logger = logging.getLogger(__name__)
 
     return obj
 
@@ -812,3 +815,24 @@ def test_bad_article_sashikomu(parser):
     assert result.reading == "さしこむ"
     assert result.mainsense == "вкладывать, вставлять"
 
+
+def test_article_with_brackets_chimata(parser):
+    test_articles = [
+        """ちまた
+巷
+1) (тж. 街) перекрёсток; улица;
+雑沓の街 шумные улицы; перен. городская толчея;
+2) развилка дорог; перепутье;
+3) грань, граница;
+生死の巷をさまよう находиться (блуждать) между жизнью и смертью;
+4) арена, сцена чего-л.;
+戦火の巷 арена войны; места боёв;
+風が少し強く吹けば紅塵万丈の巷となる стоит подуть ветру сильней, как поднимаются тучи пыли;
+紅塵の巷から遠い обр. вдалеке от шумной (суетной) толпы."""
+    ]
+
+    result = parser.process_results(test_articles)[0]
+
+    assert result.word == "巷"
+    assert result.reading == "ちまた"
+    assert result.mainsense == "перекрёсток, улица"
