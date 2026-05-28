@@ -8,7 +8,7 @@ from shared.csv.utils import get_words
 load_dotenv()
 Logger = getLogger(__name__)
 
-OUTPUT_DIR = os.getenv("TTS_OUTPUT_FOLDER")
+OUTPUT_DIR = os.getenv("TTS_OUTPUT_FOLDER", "/output")
 VOICEVOX_URL = "http://127.0.0.1:50021"
 SPEAKER_ID = 1
 

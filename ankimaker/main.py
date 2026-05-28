@@ -15,10 +15,12 @@ from shared.regex.utils import has_kanji
 
 load_dotenv()
 
-tts_folder = os.getenv("TTS_OUTPUT_FOLDER")
+tts_folder = os.getenv("TTS_OUTPUT_FOLDER", "/")
+
 
 def generate_guid(word, reading):
     return hashlib.md5(f"{word}{reading}".encode()).hexdigest()
+
 
 init_db()
 
@@ -64,6 +66,9 @@ for word in words_dict.values():
     current_deck_id_jp = col.decks.id(f"Слова::Японский - Русский::{range_str}")
     current_deck_id_ru = col.decks.id(f"Слова::Русский - Японский::{range_str}")
 
+    assert current_deck_id_jp is not None, "Не удалось получить ID колоды JP"
+    assert current_deck_id_ru is not None, "Не удалось получить ID колоды RU"
+
     reading = jaconv.kata2hira(word[2])
     translations = None
     if has_kanji(word[0]):
@@ -96,7 +101,7 @@ for word in words_dict.values():
         note["MainSense"] = mainsense
         note["Senses"] = senses
 
-        audio_filename = f"{word}.wav"
+        audio_filename = f"{word_val}.wav"
         audio_path = os.path.join(tts_folder, audio_filename)
 
         if os.path.exists(audio_path):

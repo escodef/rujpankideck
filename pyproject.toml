@@ -10,6 +10,7 @@ dependencies = [
     "html2text>=2025.4.15",
     "jaconv>=0.5.0",
     "pydantic>=2.13.4",
+    "pykakasi>=2.3.0",
     "pytest>=9.0.3",
     "python-dotenv>=1.2.2",
     "pywinauto>=0.6.9",

@@ -28,9 +28,10 @@ jardic_path = os.getenv("JARDIC_PATH")
 class DictionaryProcessor:
     def __init__(self):
         self.is_windows = sys.platform == "win32"
-        self.parser = (
-            WordParserGUI(jardic_path) if self.is_windows else WordParser(dict_url)
-        )
+        if dict_url and jardic_path:
+            self.parser = (
+                WordParserGUI(jardic_path) if self.is_windows else WordParser(dict_url)
+            )
         self.running = True
 
         self.parsed_indexes = get_all_parsed_indexes()
@@ -79,7 +80,7 @@ class DictionaryProcessor:
 
         return bool(exists)
 
-    def parse_words(self, words: List[List[str]]) -> DictionaryList:
+    def parse_words(self, words: List[List[str]]) -> None:
         batch_size = 50
         seen_in_batch = set()
         for index, wordcsv in enumerate(words):

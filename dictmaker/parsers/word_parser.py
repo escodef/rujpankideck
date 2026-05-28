@@ -4,7 +4,7 @@ import html2text
 import requests
 
 from models.models import Translation
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag, NavigableString
 from typing import List
 from parsers.example_parser import ExampleParser
 
@@ -126,17 +126,18 @@ class WordParser:
             self.logger.error(f"Error parsing word {word}: {e}")
             return None
 
-    def _extract_rendered_text(self, element: Tag):
-        result = []
+    def _extract_rendered_text(self, element: Tag) -> str:
+        result: list[str] = []
 
         for child in element.descendants:
-            if child.name is None:
+            if isinstance(child, NavigableString):
                 txt = child.strip()
                 if txt:
                     result.append(txt)
 
-            if child.name == "br":
-                result.append("\n")
+            elif isinstance(child, Tag):
+                if child.name == "br":
+                    result.append("\n")
 
         text = " ".join(result)
 

@@ -7,6 +7,7 @@ from pywinauto import Application
 from pywinauto.controls.uia_controls import ListViewWrapper
 from pywinauto.findwindows import ElementNotFoundError
 from models.models import Translation
+from parsers.example_parser import ExampleParser
 from shared.regex.utils import has_cyrillic, has_kanji, split_by_dots
 
 
@@ -20,6 +21,9 @@ class WordParserGUI:
 
     def __init__(self, jardic_path: str):
         self.logger = logging.getLogger(__name__)
+
+        self.example_parser = ExampleParser()
+
         try:
             self.app = Application(backend="uia").connect(
                 title_re=".*Jardic Pro.*", timeout=2
@@ -38,6 +42,8 @@ class WordParserGUI:
         tab_ctrl = self.win.child_window(control_type="Tab")
         tab_items = tab_ctrl.children(control_type="TabItem")
 
+        self.logger.debug(f"Tab items: {tab_items}")
+
         if tab_index < 0 or tab_index >= len(tab_items):
             self.logger.error(f"Tab index {tab_index} out of range")
             return
@@ -53,8 +59,9 @@ class WordParserGUI:
             input_box = self.win.child_window(auto_id="202", control_type="Edit")
             input_box.set_edit_text("")
 
-            tab_idx = 3 if has_kanji(word) else 2
+            tab_idx = 2 if has_kanji(word) else 1
             self.switch_tab(tab_idx)
+
             input_box.type_keys(word, with_spaces=True)
             pane = self.win.child_window(control_id=201)
             table = self.win.child_window(control_id=100)
