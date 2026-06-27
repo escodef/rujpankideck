@@ -312,6 +312,4 @@ def test_go(processor: DictionaryProcessor):
             dictionary.append(translation)
             processor._add_to_seen(translation, seen_in_batch)
 
-    print(seen_in_batch)
-
     assert len(dictionary) == 10

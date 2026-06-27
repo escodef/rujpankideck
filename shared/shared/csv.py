@@ -1,3 +1,4 @@
+import logging
 from shared.config import CSV_PATH
 import csv
 
@@ -12,7 +13,7 @@ def get_words() -> List[List[str]]:
 
     with open(CSV_PATH, "r", newline="", encoding="utf-8") as f:
         csv_file = csv.reader(f)
-        print(f"Открытие файла: {CSV_PATH}")
+        logging.debug(f"Открытие файла: {CSV_PATH}")
 
         try:
             for row in csv_file:
@@ -21,8 +22,8 @@ def get_words() -> List[List[str]]:
                     continue
                 words.append(row)
         except csv.Error as e:
-            print(f"Ошибка в строке №{line_number}")
-            print(f"Тип ошибки: {e}")
+            logging.error(f"Ошибка в строке №{line_number}")
+            logging.error(f"Тип ошибки: {e}")
             raise
 
         return words

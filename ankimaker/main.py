@@ -124,7 +124,7 @@ def main():
         exporter = AnkiPackageExporter(col)
         output_file = "japanese_vocab.apkg"
         exporter.exportInto(output_file)
-        print(f"Готово! Файл создан: {output_file}")
+        logging.info(f"Готово! Файл создан: {output_file}")
 
     finally:
         col.close()
