@@ -21,7 +21,9 @@ from sqlalchemy.orm import Session
 load_dotenv()
 
 dict_url = os.getenv("DICT_URL", "https://www.jardic.ru/search/search_r.php")
-jardic_path = os.getenv("JARDIC_PATH", "C:\Program Files (x86)\JardicPro\JardicPro.exe")
+jardic_path = os.getenv(
+    "JARDIC_PATH", "C:\\Program Files (x86)\\JardicPro\\JardicPro.exe"
+)
 
 
 class DictionaryProcessor:

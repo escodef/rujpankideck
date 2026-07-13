@@ -965,4 +965,4 @@ TN69757
 
     assert result.word == "館"
     assert result.reading == "やかた"
-    assert result.mainsense == "дворец"
+    assert result.mainsense == "дворец, палаты"

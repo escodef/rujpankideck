@@ -1,13 +1,7 @@
 [project]
 name = "tts"
-version = "0.1.0"
+version = "1.0.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = ["shared"]
-
-[tool.uv]
-cache-dir = "./.uv_cache"
-
-[tool.uv.sources]
-shared = { workspace = true }

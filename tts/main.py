@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from pathlib import Path
 from shared.media import get_audio_filename
 from shared.config import (
@@ -161,7 +162,9 @@ def main():
                 )
 
 
-def fallback_single_generation(batch: list[tuple], session, accents_dict):
+def fallback_single_generation(
+    batch: List[Tuple[str, str, str]], session, accents_dict
+):
     for kanji, katakana, filename in batch:
         hira = jaconv.kata2hira(katakana)
         accent = accents_dict.get((kanji, hira), 0)

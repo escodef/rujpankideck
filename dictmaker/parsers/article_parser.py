@@ -19,7 +19,7 @@ class ArticleParser:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
 
-    def process_results(self, results: list[str]) -> List[Translation]:
+    def process_results(self, results: List[str]) -> List[Translation]:
         ts: List[Translation] = []
         for entry in results:
             entry = entry.replace("\r", "")
@@ -93,19 +93,35 @@ class ArticleParser:
         lines = article.split("\n")
 
         if "2-я основа" in lines[0]:
+            self.logger.debug(f"слово было во второй основе в строке: {lines[0]}")
             article = "\n".join(lines[3:])
 
         if "уст." in lines[0] or "сущ." in lines[0] or "ономат." in lines[0]:
-            article = "\n".join(lines[1:])
+            cleaned_label = re.sub(r"\b(уст|сущ|ономат|связ)\b\.?", "", lines[0])
+            cleaned_label = re.sub(rf"[{self.JAP_LETTERS}\s\d\W]+", "", cleaned_label)
+
+            if not has_cyrillic(cleaned_label):
+                self.logger.debug(f"найдено пояснение в строке: {lines[0]}")
+                article = "\n".join(lines[1:])
+            else:
+                lines[0] = re.sub(r"^\s*(уст|сущ|ономат|связ)\b\.?\s*", "", lines[0])
+                article = "\n".join(lines)
 
         art_contain_list = self.LIST_RE.search(article)
 
         if art_contain_list:
+            self.logger.debug("статья содержит список")
             senses = re.split(r"\d+[\.\)]:?\s*", article.strip())
+            self.logger.debug(f"после разделения по цифрам: {senses}")
             senses = [p.strip(" ;\n") for p in senses if p.strip()]
+            self.logger.debug(f"после удаления пустых строк: {senses}")
             senses = [item.strip(" ;\n") for s in senses for item in s.split(";")]
+            self.logger.debug(f"после разделения по комам: {senses}")
         else:
             senses = article.split(";")
+            self.logger.debug(
+                f"статья не содержит списка, после разделения по комам: {senses}"
+            )
 
         part = senses[0].strip("\n")
         result = part.partition(":")[-1].strip(" ;\n") or part.strip(" ;\n")
@@ -120,6 +136,10 @@ class ArticleParser:
             part = re.sub(self.JAP_RE, "", part)
             part = re.sub(self.LETTER_LIST_RE, "", part)
             part = re.sub(self.JAP_IN_BRACKETS_RE, "", part).strip(" .")
+
+            if re.search(rf"[{self.JAP_LETTERS}]", part):
+                break
+
             if len(result + part) > 25 or not part:
                 break
             result = result + ", " + part

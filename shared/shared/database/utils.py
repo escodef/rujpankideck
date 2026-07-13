@@ -1,10 +1,11 @@
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from .db_session import get_session
 from .models import ExampleTable, NotFoundTable, TranslationTable
 
 
-def save_to_sqlite(dictionary: list, session: Session | None = None) -> None:
+def save_to_sqlite(dictionary: List, session: Session | None = None) -> None:
     def _save(sess: Session):
         for item in dictionary:
             db_translation = TranslationTable(
@@ -78,7 +79,7 @@ def get_by_word_and_reading(
 
 def get_by_reading(
     reading: str, limit: int = 3, session: Session | None = None
-) -> list[TranslationTable]:
+) -> List[TranslationTable]:
     pattern_middle = f"%・{reading}・%"
     pattern_middle_spaced = f"%・ {reading} ・%"
     pattern_end = f"%・{reading}"

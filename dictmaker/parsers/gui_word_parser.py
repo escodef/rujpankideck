@@ -92,7 +92,7 @@ class WordParserGUI(BaseWordParser):
                 last_article = current_article
                 table_obj.type_keys("{VK_UP}")
 
-            results: list[str] = []
+            results: List[str] = []
 
             while True:
                 current_article: str = pane.get_value().replace("\r", "\n").strip()

@@ -95,7 +95,7 @@ class WordParser(BaseWordParser):
             return None
 
     def _extract_rendered_text(self, element: Tag) -> str:
-        result: list[str] = []
+        result: List[str] = []
 
         for child in element.descendants:
             if isinstance(child, NavigableString):

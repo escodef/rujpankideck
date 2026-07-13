@@ -1,10 +1,7 @@
 [project]
 name = "dictmaker"
-version = "2026.1.7"
+version = "1.0.0"
 description = "Dictionary generator for anki cards"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = ["shared"]
-
-[tool.uv.sources]
-shared = { workspace = true }
